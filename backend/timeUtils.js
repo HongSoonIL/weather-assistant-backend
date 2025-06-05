@@ -89,4 +89,5 @@ function getNearestForecastTime(date) {
 module.exports = {
   extractDateFromText,
   getNearestForecastTime
+
 };

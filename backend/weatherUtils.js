@@ -1,15 +1,12 @@
+require('dotenv').config();
 const axios = require('axios');
+const OPENWEATHER_API_KEY = process.env.OPENWEATHER_API_KEY;
 
-const OPENWEATHER_API_KEY = '81e4f6ae97b20ee022116a9ddae47b63'; // 실제 키로 대체하세요
-
-// 🔹 위경도 기반 날씨 정보 가져오기 (One Call 3.0)
 async function getWeather(lat, lon, forecastTime = null) {
   const url = `https://api.openweathermap.org/data/3.0/onecall?lat=${lat}&lon=${lon}&exclude=minutely,daily,alerts&appid=${OPENWEATHER_API_KEY}&units=metric&lang=kr`;
-
   const res = await axios.get(url);
   const data = res.data;
 
-  // 🔸 현재 or 시간대별 중 가장 가까운 값 선택
   let target;
   if (!forecastTime) {
     target = data.current;
@@ -37,6 +34,23 @@ async function getWeather(lat, lon, forecastTime = null) {
   };
 }
 
+async function getWeatherByCoords(lat, lon) {
+  const url = `https://api.openweathermap.org/data/3.0/onecall?lat=${lat}&lon=${lon}&appid=${OPENWEATHER_API_KEY}&units=metric&lang=en`;
+  const response = await axios.get(url);
+  const data = response.data;
+
+  return {
+    temp: Math.round(data.current.temp),
+    condition: data.current.weather[0].main,
+    feelsLike: Math.round(data.current.feels_like),
+    tempMin: Math.round(data.daily[0].temp.min),
+    tempMax: Math.round(data.daily[0].temp.max),
+    humidity: data.current.humidity,
+    wind: data.current.wind_speed
+  };
+}
+
 module.exports = {
-  getWeather
+  getWeather,
+  getWeatherByCoords
 };
