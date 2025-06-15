@@ -1,7 +1,7 @@
 // placeExtractor.js
 function extractLocationFromText(text) {
   // ✅ 시간 표현 제거 (장소 혼동 방지)
-  const timePattern = /(지금|현재|오늘|내일|모레|이번주\s?[월화수목금토일]요일?|다음주\s?[월화수목금토일]요일?|[월화수목금토일]요일|하루|이틀|삼일|사흘|닷새|엿새|뒤|\d{1,2}일\s?뒤|\d{1,2}시간\s?뒤|\d{1,2}분\s?뒤)/g;
+  const timePattern = /(지금|현재|오늘|내일|모레|이번주\s?[월화수목금토일]요일?|다음주\s?[월화수목금토일]요일?|[월화수목금토일]요일|하루|이틀|삼일|사흘|닷새|엿새|뒤|\d{1,2}일\s?뒤|\d{1,2}시간\s?뒤|\d{1,2}분\s?뒤|과|랑|와|는|이랑)/g;
 
   const cleanText = text.replace(timePattern, '').trim();
 
@@ -15,7 +15,7 @@ function extractLocationFromText(text) {
   const locationMatch = cleanText.match(/([가-힣]+)(시|도|군|구|동|읍|면)?/);
   if (!locationMatch) return null;
 
-  let location = locationMatch[0].replace(/(에서|으로|까지|은|는|이|가|의|에)?$/, '');;
+  let location = locationMatch[0].replace(/(에서|으로|까지|은|는|이|가|의|에|랑|와|과)?$/, '');;
 
   if (excluded.includes(location)) return null;
 
